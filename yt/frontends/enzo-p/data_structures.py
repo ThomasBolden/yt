@@ -14,10 +14,13 @@ Data structures for Enzo - P / Cello
 #-----------------------------------------------------------------------------
 
 import os
+import re
+import ast
 import numpy as np
 import weakref
 
-from yt.utilities.on_demand_imports import _h5py as h5py
+from yt.utilities.on_demand_imports import _h5py    as h5py
+from yt.utilities.logger            import ytLogger as mylog
 
 from yt.data_objects.grid_patch import \
     AMRGridPatch
@@ -97,6 +100,7 @@ class EnzoPDataset(Dataset):
                  storage_filename=None,
                  units_override=None):
         self.fluid_types += ('enzo-p',)
+        self.parameter_filename = filename + ".parameters"
         Dataset.__init__(self, filename, dataset_type,
                          units_override=units_override)
         self.storage_filename = storage_filename
@@ -139,7 +143,20 @@ class EnzoPDataset(Dataset):
         #   self.omega_lambda               <= float
         #   self.omega_matter               <= float
         #   self.hubble_constant            <= float
-        pass
+
+        f = open(self.parameter_filename, 'r')
+        f = f.read()
+
+        reg_str = r".=.(\[.*?\])"
+        field_regex  = r"Field.\{.*?list"+reg_str
+        domain_regex = r"Domain.\{.*?lower"+reg_str
+        method_regex = r"Method.\{.*?list"+reg_str
+
+        for matchNum, match in enumerate(field_matches):
+            print(len(match.groups()))
+            for groupNum in range(0, len(match.groups())):
+                print ("fields: ",ast.literal_eval(match.group(1)))
+
 
     @classmethod
     def _is_valid(self, *args, **kwargs):

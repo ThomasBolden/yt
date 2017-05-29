@@ -20,12 +20,12 @@ from yt.fields.field_info_container import \
 # container subclass here will define which fields it knows about.  There are
 # optionally methods on it that get called which can be subclassed.
 
-v_units = "code_velocity"
+v_units   = "code_velocity"
 acc_units = "code_velocity / code_time"
-de_units = "code_mass / code_length**3"
-E_units = "code_mass * code_velocity**2"
-p_units = "code_mass * code_velocity * code_length**2 / code_time"
-b_units = "code_magnetic"
+de_units  = "code_mass / code_length**3"
+E_units   = "code_mass * code_velocity**2"
+p_units   = "code_mass * code_velocity * code_length**2 / code_time"
+b_units   = "code_magnetic"
 
 # unsure about the names after the colon
 #REMOVE
@@ -47,6 +47,9 @@ class EnzoPFieldInfo(FieldInfoContainer):
     known_other_fields = (
         # Each entry here is of the form
         # ( "name", ("units", ["fields", "to", "alias"], # "display_name")),
+        # where "name" is the name of the field stored on the disk
+        # and "display_name" is the name to be displayed on plots (I think)
+
         ("density",         (de_units, ["density"],         None)),
         ("pressure",        (p_units,  ["pressure"],        None)),
         ("total_Energy",    (E_units,  ["total_energy"],    None)),

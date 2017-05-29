@@ -16,7 +16,14 @@ Enzo-P-specific IO functions
 from yt.utilities.io_handler import \
     BaseIOHandler
 
-class IOHandlerEnzoP(BaseIOHandler):
+from yt.utilities.logger import ytLogger as mylog # for status updates
+from yt.utilities.on_demand_imports import _h5py as h5py
+
+from yt.extern.six import b, iteritems # ?? something about using py2 and py3
+
+import numpy as np
+
+class IOHandlerEnzoP(BaseIOHandler): # HDF5
     _particle_reader = False
     _dataset_type = "enzo-p"
 
@@ -38,7 +45,7 @@ class IOHandlerEnzoP(BaseIOHandler):
     def _read_fluid_selection(self, chunks, selector, fields, size):
         # This needs to allocate a set of arrays inside a dictionary, where the
         # keys are the (ftype, fname) tuples and the values are arrays that
-        # have been masked using whatever selector method is appropriate.  The
+        # have been masked using whatever selector method is appropriate. The
         # dict gets returned at the end and it should be flat, with selected
         # data.  Note that if you're reading grid data, you might need to
         # special-case a grid selector object.
